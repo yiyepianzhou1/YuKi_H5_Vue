@@ -1,49 +1,37 @@
 <template>
   <div id="app">
-  	<header class="header">
-        <div class="header_main">
-            <div class="fontsimg">
-               <span></span>
-            </div>
-            <div class="search">
-                <input type="text" class="to_search" placeholder="日本进口面膜">
-            </div>
-        </div>
-		</header>
+    <router-view></router-view>
+
     <nav class="mui-bar mui-bar-tab">
-			<a class="mui-tab-item mui-active" href="#tabbar">
+			<router-link class="mui-tab-item mui-active" to="/home">
 				<span class="mui-icon mui-icon-home"></span>
 				<span class="mui-tab-label">首页</span>
-			</a>
-			<a class="mui-tab-item" href="#tabbar-with-chat">
+			</router-link>
+			<router-link class="mui-tab-item" to="/classify">
 				<span class="mui-icon mui-icon-email"><span class="mui-badge">9</span></span>
 				<span class="mui-tab-label">消息</span>
-			</a>
-			<a class="mui-tab-item" href="#tabbar-with-contact">
+			</router-link>
+			<router-link class="mui-tab-item" to="/shopingCar">
 				<span class="mui-icon mui-icon-contact"></span>
 				<span class="mui-tab-label">通讯录</span>
-			</a>
-			<a class="mui-tab-item" href="#tabbar-with-map">
+			</router-link>
+			<router-link class="mui-tab-item" to="/My">
 				<span class="mui-icon mui-icon-gear"></span>
 				<span class="mui-tab-label">设置</span>
-			</a>
+			</router-link>
 		</nav>
-    <hello></hello>
+
   </div>
 </template>
 
 <script type="es6">
-import Hello from './components/home/indenx.vue'
-
 export default {
   name: 'app',
-  components: {
-    Hello
-  }
+  components: {},
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -51,33 +39,67 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-#app .header {
-    display: flex;
-    background:#fff
-}
-#app .header .header_main {
+#app  {
+.header {
+  padding: 0 0.32rem;
+  width: 100%;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  background: #ffffff;
+  .header_main{
     width:100%;
-}
-#app .header .header_main .fontsimg{
-    float:left;
-}
-#app .header .header_main .search {
-    float:right;
-}
-#app .headers .serchs{
-    float:right;
-    overflow: hidden;
-    margin: 0 0.4rem;
-    width: 5.11rem;
-    height: 0.64rem;
-    border: 0.01rem solid #d4d4d4;
-    border-radius: 0.32rem;
-}
-#app .headers .to-search {
-  color: #999999;
+    .fontsimg{
+      float:left;
+    span{
+      margin: 0.08rem 0;
+      font-size: 0.2rem;
+    }
+      .fontsimg_Coupons{
+        text-align: center;
+        width: 0.48rem;
+        height: 0.48rem;
+background: url(../static/img/home_icon_ticket@3x.png);
+        background-size: 100%;
+      }
+    }
+.search{
+  padding-left: 0.3rem;
+  position: relative;
+  overflow: hidden;
+  margin: 0 0.4rem;
+  width: 5.11rem;
+  height: 0.64rem;
+  border: 0.01rem solid #d4d4d4;
+  border-radius: 0.32rem;
+  margin: 5px 0;
+  float:right;
   background: #EBEBEB;
-  font-size: 0.28rem;
-  border:0;
-  color: #333333;
+.mui-icon{
+  position: absolute;
+  font-size: 0.3rem;
+  left: 0;
+  top: 25%;
+  display: inline-flex;
+  margin-left: 0.16rem;
+  width: 0.32rem;
+  height: 0.32rem;
+  background-size: 100%;
+}
+  input{
+    padding: 0;
+    padding-left: 0px;
+    padding-left: 20px;
+    background: #EBEBEB;
+    font-size: 0.28rem;
+    outline: none;
+    border: none;
+    width: 100%;
+    height: 100%;
+  }
+}
+  }
+
+}
 }
 </style>
