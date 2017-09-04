@@ -21,6 +21,7 @@
          findGoodDetail(){
            var url = Api.Apis+'/h5/h5good/findGoodDetail'
            this.$http.post(url).then(function(data){
+             console.log(data.body)
 
            })
          }

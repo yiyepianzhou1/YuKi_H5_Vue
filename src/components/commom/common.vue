@@ -1,6 +1,5 @@
 <template>
-    <div>
-
+    <div id="apps">
     </div>
 </template>
 <script type='es6'>

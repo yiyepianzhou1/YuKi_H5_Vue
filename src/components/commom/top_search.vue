@@ -7,9 +7,9 @@
             <span>优惠券</span>
           </div>
           <div class="search">
-            <span class="mui-icon mui-icon-search"></span>
-            <input type="text" class="to_search" placeholder="日本进口面膜">
-          </div>
+          <span class="mui-icon mui-icon-search"></span>
+          <input type="text" class="to_search" placeholder="日本进口面膜">
+        </div>
         </div>
       </header>
     </div>
