@@ -1,33 +1,33 @@
 <template>
   <div id="app">
     <router-view></router-view>
-
-    <nav class="mui-bar mui-bar-tab">
-			<router-link class="mui-tab-item mui-active" to="/home">
-				<span class="mui-icon mui-icon-home"></span>
-				<span class="mui-tab-label">首页</span>
-			</router-link>
-			<router-link class="mui-tab-item" to="/classify">
-				<span class="mui-icon mui-icon-email"><span class="mui-badge">9</span></span>
-				<span class="mui-tab-label">消息</span>
-			</router-link>
-			<router-link class="mui-tab-item" to="/shopingCar">
-				<span class="mui-icon mui-icon-contact"></span>
-				<span class="mui-tab-label">通讯录</span>
-			</router-link>
-			<router-link class="mui-tab-item" to="/My">
-				<span class="mui-icon mui-icon-gear"></span>
-				<span class="mui-tab-label">设置</span>
-			</router-link>
-		</nav>
-
+    <tabbar v-if="isShow"></tabbar>
   </div>
 </template>
 
 <script type="es6">
+  import tabbar from './components/commom/tabbar.vue'
 export default {
   name: 'app',
-  components: {},
+  data(){
+  return {
+    isShow:true
+    }
+  },
+  components: { tabbar },
+    //添加监听路由路径、
+    watch:{
+      $route(){
+        console.log(this.$route.path)
+        if(this.$route.path==="/new_recommend"){
+          this.isShow=false
+        }else{
+          this.isShow=true
+        }
+      }
+  },
+  methods:{
+  }
 }
 </script>
 <style scoped lang="less">

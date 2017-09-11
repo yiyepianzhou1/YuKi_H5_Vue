@@ -15,20 +15,25 @@
     </div>
 </template>
 <script type='es6'>
-     export default {
-     data(){
-         return {
-         }
-     },
-       mounted(){
-         var that = this,
-           apps = document.querySelector('#apps')
-         apps.style.marginTop =that.$refs.header.offsetHeight+'px'
-         window.document.body.onresize = function(){
-           apps.style.marginTop =that.$refs.header.offsetHeight+'px'
-         }
-       }
-   }
+  export default {
+    data(){
+      return {
+        resurts: 1
+      }
+    },
+    mounted(){
+      var that = this,
+        apps = document.querySelector('#apps');
+      apps.style.marginTop = that.$refs.header.offsetHeight + 'px'
+      if (that.$refs.header.offsetHeight !== undefined) {
+        window.document.body.onresize = function () {
+          if (that.$refs.header) {
+            apps.style.marginTop = that.$refs.header.offsetHeight + 'px'
+          }
+        }
+      }
+    }
+  }
 </script>
 <style lang="less" scoped>
   #top_search{

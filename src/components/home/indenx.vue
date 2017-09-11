@@ -15,7 +15,7 @@
     <!-- 新品推荐部分开始-->
     <div class="news_recommend">
       <!-- 跳转至新品推荐-->
-      <router-link to="/news_recommend"><h2 class="recommend">新品推荐 <span class="news_recommend_icon"></span></h2>
+      <router-link :to="{path:'new_recommend',query:{isNews:'true'}}"><h2 class="recommend">新品推荐 <span class="news_recommend_icon"></span></h2>
       </router-link>
       <div class="imgshare_top" @load="loaded">
         <div id="wrapper" class="clearfix">
@@ -23,7 +23,7 @@
             <ul class="clearfix" id="scroller_main">
               <li class="active lisAll" v-for="(item,indenx) in listnews">
                 <!-- 跳转至商品详情页-->
-                <router-link to="/">
+                <router-link :to="{path:'/details',query:{ids:item.goodId}}">
                   <img :src="item.goodPicUrl" alt=""/>
                   <span>{{item.goodName}}</span>
                   <p>￥{{item.goodMinPrice | substr}}</p>
@@ -38,13 +38,13 @@
 
     <!--人气推荐部分开始-->
     <div class="people_recommend">
-      <router-link to="/" class="clearfix"><h2 class="recommend">人气推荐 <span class="news_recommend_icon"></span></h2>
+      <router-link :to="{path:'new_recommend',query:{isNews:'false'}}" class="clearfix"><h2 class="recommend">人气推荐 <span class="news_recommend_icon"></span></h2>
       </router-link>
       <div class="people_recommend_main">
       <ul class="mui-table-view mui-table-view-chevron">
         <li class="mui-table-view-cell mui-media" v-for="item in recommend_list">
           <!-- 跳转至商品详情页-->
-          <router-link to="/" class="mui-navigate-right">
+          <router-link :to="{path:'/details',query:{ids:item.goodId}}" class="mui-navigate-right">
             <img class="mui-media-object mui-pull-left" :src="item.goodPicUrl">
             <div class="mui-media-body">
               {{item.goodName}}
@@ -64,7 +64,7 @@
       <div class="mui-content">
         <ul class="mui-table-view mui-grid-view">
           <li class="mui-table-view-cell mui-media mui-col-xs-6" v-for="item in guess_list">
-            <router-link to="/">
+            <router-link :to="{path:'/details',query:{ids:item.goodId}}">
               <img class="mui-media-object" :src="item.goodPicUrl">
               <div class="mui-media-body">{{item.goodName}}</div>
               <p>￥{{item.goodMinPrice|substr}}</p>
@@ -74,6 +74,7 @@
       </div>
     </div>
   </div>
+
   <!-- 猜你喜欢部分结束-->
   </div>
 </template>
@@ -93,7 +94,7 @@
         guess_list:[],
       }
     },
-    components: {topsearch},
+    components: { topsearch },
     mounted(){
       this.loaded();
       this.getsbanner();
@@ -103,7 +104,6 @@
         var url = Api.Apis + '/h5/h5index/indexPage'
         this.$http.post(url).then(function (data) {
           if (data.status == 200 && data.ok == true) {
-            console.log(data)
             var datas = data.body
             this.list = datas.data.banners
             this.listnews = datas.data.newGoodBeanList
@@ -236,6 +236,7 @@
     height: inherit;
   }
   .mui-media-body{
+    text-overflow: ellipsis;
     text-align: left;
     font-size: 0.3rem;
   p{

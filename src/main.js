@@ -4,9 +4,11 @@ import App from './App';
 import vueRouter from 'vue-router';
 import MintUi from 'mint-ui';
 import resource from 'vue-resource';
+import Vuepreview from 'vue-preview';
 Vue.use(MintUi);
 Vue.use(vueRouter);
 Vue.use(resource);
+Vue.use(Vuepreview);
 
 // 组件部分的引入
 import home from './components/home/indenx.vue';
@@ -36,12 +38,18 @@ import '../static/mui/css/mui.css';
 import '../static/css/base.css';
 import  'mint-ui/lib/style.css';
 
-//自定义一个过滤器截取字符串
+//自定义一个全局过滤器截取字符串
 Vue.filter('substr',function(val){
   var str = val.toString(),
         newstr =  str.substring(0,str.length-2);
   return newstr
 });
+//自定一个日期格式化过滤器
+Vue.filter('days',function(val){
+
+})
+
+
 // 实例化vue
 new Vue({
   el: '#app',
