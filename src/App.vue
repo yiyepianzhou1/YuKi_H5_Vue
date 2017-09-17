@@ -18,8 +18,7 @@ export default {
     //添加监听路由路径、
     watch:{
       $route(){
-        console.log(this.$route.path)
-        if(this.$route.path==="/new_recommend"){
+        if(this.$route.path==="/new_recommend" || this.$route.path==="/shopingCar"){
           this.isShow=false
         }else{
           this.isShow=true

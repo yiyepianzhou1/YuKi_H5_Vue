@@ -1,5 +1,7 @@
 <template>
+<div id="counts">
 
+</div>
 </template>
 <script type='es6'>
      export default {

@@ -58,22 +58,7 @@
     <!-- 人气推荐部分结束-->
 
   <!-- 猜你喜欢部分开始-->
-  <div class="guess_likes">
-     <h2 class="guess_likes_title">猜你喜欢</h2>
-    <div class="guess_likes_main">
-      <div class="mui-content">
-        <ul class="mui-table-view mui-grid-view">
-          <li class="mui-table-view-cell mui-media mui-col-xs-6" v-for="item in guess_list">
-            <router-link :to="{path:'/details',query:{ids:item.goodId}}">
-              <img class="mui-media-object" :src="item.goodPicUrl">
-              <div class="mui-media-body">{{item.goodName}}</div>
-              <p>￥{{item.goodMinPrice|substr}}</p>
-            </router-link>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+    <guess_likes :guesslist='guess_list'></guess_likes>
 
   <!-- 猜你喜欢部分结束-->
   </div>
@@ -83,6 +68,7 @@
   import '../../../static/scroll/iscroll.css'
   import Api from '../../components/commom/API.js'
   import  topsearch from '../commom/top_search.vue'
+  import guessLikes from '../commom/guess_you_like.vue'
   //Vue.component(Swipe.name, Swipe);
   //Vue.component(SwipeItem.name, SwipeItem);
   export default {
@@ -92,9 +78,10 @@
         listnews: [],
         recommend_list:[],
         guess_list:[],
+        //guesslikes:1
       }
     },
-    components: { topsearch },
+    components: { topsearch,guess_likes:guessLikes },
     mounted(){
       this.loaded();
       this.getsbanner();
@@ -255,37 +242,5 @@
   }
   }
   /*人气推荐部分结束*/
-
-  /*猜你喜欢部分开始*/
-  .guess_likes{
-.guess_likes_title{
-  font-size: 0.3rem;
-  line-height: 0.9rem;
-  font-weight: 500;
-}
-  .guess_likes_main{
-  ul{
-    background-color: #efeff4;
-  li{
-    padding: 0.15rem;
-  a{
-    margin: 0;
-    padding: 0;
-    background-color: #ffffff;
-  }
-  div{
-    height: inherit;
-    line-height: normal;
-    font-size: 0.3rem;
-  }
-  p{
-    color: red;
-    font-size: 0.2rem;
-  }
-  }
-  }
-  }
-  }
-  /*猜你喜欢部分结束*/
   }
 </style>
