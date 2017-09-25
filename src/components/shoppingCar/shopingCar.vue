@@ -4,7 +4,8 @@
     <div class="top_back clearfix">
       <header id="header" class="mui-bar mui-bar-nav">
         <h2 class="mui-title">购物袋</h2>
-        <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" @click="change_shop">编辑</button>
+        <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" @click="change_shop">{{btnIsShow?"编辑":"完成"}}
+        </button>
         <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="goback"></a>
       </header>
     </div>
@@ -22,7 +23,7 @@
       <div class="shopcar_have" v-else>
         <ul class="shopcar_have_main">
           <li v-for="(item,indenx) in usergoodlist">
-            <span @click="isGobuys(item,item.priceNow,$event)"></span>
+            <span @click="isGobuys(item,item.priceNow,$event)" :class="{'bac_blue':item.checked}"></span>
             <router-link to="">
               <img :src=item.goodDetailPicUrl alt=""/>
 
@@ -55,7 +56,16 @@
     <!--猜你喜欢部分结束-->
     <!-- 底部结算部分开始-->
     <div class="shopingCar_nav">
-
+      <div class="shopingCar_nav_main">
+        <span @click="allChecked"></span>
+        <span>全选</span>
+        <span>￥{{allPrices|substr}}</span>
+        <button type="button" v-if="btnIsShow">
+          <!-- 跳转至结算页面-->
+          <router-link :to="{path:'/',query:{skuids:skuidss}}" style="color: #ffffff">结算</router-link>
+        </button>
+        <button type="button" v-else @click="setDelete">删除</button>
+      </div>
     </div>
     <!-- 底部结算部分结束-->
   </div>
@@ -73,7 +83,10 @@
         changecont_isShow: true,
         counts: 0,
         flage: true,
-        allPrices: 0
+        isFlage: true,
+        allPrices: 0,
+        btnIsShow: true,
+        skuids: "",
       }
     },
     components: {guesslikes},
@@ -103,46 +116,36 @@
       change_shop(){
         if (this.changecont_isShow === true) {
           this.changecont_isShow = !this.changecont_isShow
+          this.btnIsShow = !this.btnIsShow
         } else if (this.changecont_isShow === false) {
           this.changecont_isShow = !this.changecont_isShow
+          this.btnIsShow = !this.btnIsShow
         }
       },
       //点击选中需要添加至结算
-      isGobuys(i, p, e){
-        console.log(i)
-        console.log(p)
-        //事先注册checked
+      isGobuys(i){
         if (typeof i.checked === 'undefined') {
-          //注册checked属性
           this.$set(i, "checked", true)
         } else {
           i.checked = !i.checked
         }
-        if (i.checked) {
-          e.target.style.backgroundImage = "url(../../../static/img/shopping-bag/common_icon_chose@3x.png)"
-          e.target.style.backgroundSize = "cover"
-          e.target.style.border = "none"
-        } else {
-          e.target.style.backgroundImage = "none"
-          e.target.style.border = "1px solid #ccc"
-        }
+        this.calcTotalPrice()
       },
-      //更改购物车数量加
+      //编辑购物车数量加
       changecont(item, conts){
         var thats = this
         if (conts > 0) {
           item.count++
           //判断库存还否足够
-          if (item.count >= item.skuStock) {
+          if (item.count > item.skuStock) {
             item.count = item.skuStock
-
+            alert("库存不够了")
           } else {
             var url = Api.Apis + "/h5/h5goodcart/updateUserGoodCart"
             this.$http.post(url,
               {cartid: item.cartid, type: "plus", userid: thats.useid, skuid: item.skuid, count: item.count},
               {emulateJSON: true}
             ).then(function (data) {
-                //alert(data.body.state)
               })
           }
         } else {
@@ -156,23 +159,60 @@
               {cartid: item.cartid, type: "less", userid: thats.useid, skuid: item.skuid, count: item.count},
               {emulateJSON: true}
             ).then(function (data) {
-                alert(data.body.state)
               })
           }
         }
       },
-      //  更改购物车
-      changeCarCount(){
-        var url = Api.Apis + "/h5/h5goodcart/updateUserGoodCart"
+      //  计算金额
+      calcTotalPrice(){
+        this.allPrices = 0;
+        this.usergoodlist.forEach((value, index)=> {
+          if (value.checked) {
+            this.allPrices += value.priceNow * value.count;
+          }
+        })
+      },
+      //  全选与取消
+      allChecked(){
+        console.log(this.flage)
+        this.usergoodlist.forEach((value, index)=> {
+          value.checked !== undefined ? value.checked = this.flage : this.$set(value, "checked", true);
+        })
+        this.flage = !this.flage
+        this.calcTotalPrice()
+      },
+      //  删除
+      setDelete(){
+        var cartids = [];
+        this.usergoodlist.forEach((value)=> {
+          if (value.checked) {
+            cartids.push(value.cartid);
+          }
+        })
+        var ids = cartids.join(',');
+        var url = Api.Apis + "/h5/h5goodcart/delUserGoodCart";
         this.$http.post(url,
-          {},
-          {emulateJSON: true}).then(function (data) {
-
+          {cartids: ids, userid: this.useid},
+          {emulateJSON: true}
+        ).then((data)=> {
+            this.getsfindcarts()
           })
-      }
+      },
+    },
+    computed: {
+      skuidss(){
+        var ids = [];
+        this.usergoodlist.forEach((value)=> {
+          if (value.checked) {
+            ids.push(value.skuid);
+          }
+        })
+        this.skuids = ids.join(',');
+        return this.skuids
+      },
     },
     mounted(){
-      this.getsfindcarts()
+      this.getsfindcarts();
     }
   }
 
@@ -288,6 +328,12 @@
 
   }
   }
+  .bac_blue {
+    background-image: url(../../../static/img/shopping-bag/common_icon_chose@3x.png);
+    background-size: cover;
+    border: none;
+  }
+
   &
   >
   span {
@@ -334,7 +380,60 @@
   }
   }
   }
+  .shopingCar_nav {
+    width: 100%;
+    position: relative;
+    margin-top: .96rem;
 
+  .shopingCar_nav_main {
+    display: flex;
+    height: 0.96rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #F7F7F7;
+    border-top: 1px solid #999999;
+    text-align: left;
+    justify-content: space-between;
+    align-items: center;
+
+  span {
+    font-size: .27rem;
+  }
+
+  span:nth-of-type(1) {
+    margin-left: .32rem;
+    float: left;
+    width: .42rem;
+    height: .42rem;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+  }
+
+  span:nth-of-type(2) {
+
+    margin-left: -1.7rem;
+  }
+
+  span:nth-of-type(3) {
+    color: #E54560;
+    margin-right: -1.8rem;
+  }
+
+  button {
+    font-size: .26rem;
+    height: 100%;
+    line-height: .96rem;
+    padding: 0;
+    border: none;
+    width: 2.28rem;
+    background-color: #4595E5;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  }
+  }
   }
 
 </style>
